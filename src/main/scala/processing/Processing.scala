@@ -4,11 +4,14 @@ import io.circe._, io.circe.generic.auto._, io.circe.parser._, io.circe.syntax._
 
 case class Impression(id: String, app_id: Integer, country_code: String, advertiser_id: String)
 
+case class Click(impression_id: String, revenue: Double)
+
 object Processing {
 
-	def loadImpressions(path: String): Seq[Impression] = {
+	def loadClicks(path: String): Seq[Click] = {
 		val buffer = scala.io.Source.fromFile(path).mkString
-		decode[Seq[Impression]](buffer).right.get
+		val either = decode[Seq[Click]](buffer)
+		either.right.get
 	}
 
 }
