@@ -19,6 +19,7 @@ object Computation {
 			}
 			}
 			.toSeq
+
 	}
 
 	def computeTopAdvertisers(impressions: Seq[Impression], clicks: Seq[Click])(implicit spark: SparkSession): Dataset[TopAdvertisers] = {
@@ -47,6 +48,7 @@ object Computation {
 			.withColumn(recommended_advertiser_idsF, expr("transform(First5,x -> cast(x[1] as int))"))
 			.select(app_idF, country_codeF, recommended_advertiser_idsF)
 			.as[TopAdvertisers]
+			.sort(country_codeF, app_idF)
 
 		//		topAdvertizer.printSchema()
 		//		topAdvertizer.show()

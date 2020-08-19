@@ -2,7 +2,7 @@
 
 MASTER="local[8]"
 CONFIGPATH="."
-PROGRAM="target/scala-2.12/pubntive_2.12-0.1.jar"
+PROGRAM="target/scala-2.12/PubNative.jar"
 MAIN=PubNativeMain
 OUT=native.out
 ERR=native.err

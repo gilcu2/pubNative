@@ -1,3 +1,4 @@
+
 name := "pubNtive"
 
 version := "0.1"
@@ -17,4 +18,20 @@ libraryDependencies ++= Seq(
 
 	"org.scalatest" %% "scalatest" % "3.2.0" % "test"
 
+)
+
+mainClass in(Compile, run) := Some("PubNativeMain")
+
+test in assembly := {}
+
+assemblyJarName in assembly := "PubNative.jar"
+
+assemblyMergeStrategy in assembly := {
+	//  case PathList("org", "apache", "spark", "unused", "UnusedStubClass.class") => MergeStrategy.first
+	case PathList("META-INF", xs@_*) => MergeStrategy.discard
+	case x => MergeStrategy.first
+}
+
+assemblyShadeRules in assembly := Seq(
+	ShadeRule.rename("org.slf4j.**" -> "shaded.@1").inAll
 )

@@ -1,11 +1,10 @@
-import interfaces.Spark
+import interfaces.{HadoopFS, Spark}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 import processing._
 
 
 object PubNativeMain {
-	// TODO Use line parameter
 	// TODO Option to avoid duplicates
 	def main(argv: Array[String]): Unit = {
 
@@ -31,7 +30,13 @@ object PubNativeMain {
 		Writer.writeMetrics(metrics, pathMetrics)
 
 		val topAdvertisers = Computation.computeTopAdvertisers(impressions, clicks)
-		topAdvertisers.write.json(pathTopAdvertiser)
+		//TODO convert output to one file
+		val tmpPath = pathTopAdvertiser + ".tmp"
+		topAdvertisers.write.json(tmpPath)
+		HadoopFS.merge(pathTopAdvertiser, tmpPath)
+		HadoopFS.delete(tmpPath)
+
+		println("Processing finish")
 	}
 
 
