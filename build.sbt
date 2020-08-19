@@ -8,12 +8,10 @@ val sparkV = "2.4.5"
 val circeVersion = "0.12.3"
 
 libraryDependencies ++= Seq(
-	"io.circe" %% "circe-core",
-	"io.circe" %% "circe-generic",
-	"io.circe" %% "circe-parser"
-).map(_ % circeVersion)
 
-libraryDependencies ++= Seq(
+	"io.circe" %% "circe-core" % circeVersion,
+	"io.circe" %% "circe-generic" % circeVersion,
+	"io.circe" %% "circe-parser" % circeVersion,
 
 	"org.apache.spark" %% "spark-sql" % sparkV % "provided",
 
