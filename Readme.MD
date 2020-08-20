@@ -9,16 +9,17 @@ some metrics by country and application and the third is about finding the adver
  
  ##  Implementation
  
- The program was implemented in Scala following the TDD and Clean code guidelines. We used Sbt for building 
+ The program was implemented in Scala following the TDD and Clean Code guidelines. We used Sbt for building 
  and Scalatest for testing. Circe was used for json manipulation and Apache Spark was used in the 
  third task. All task are implemented in the processing module and called from the main program PubNativeMain. 
  Let explain in a litle more detail each task implementation.
  
  1. For loading json we read the file, transform its content to String and deserialize to 
- the respective case class sequence. This approach has the problem that the file need to fit in memory.
+ the respective case class sequence. This approach has the problem that the file needs to fit in memory.
  In a big data case must be better a stream approach. A second problem is related the inconsistencies
  in impression file with missing, null or empty fields. To manage this problem we create a case
- case class specific for loading with all field is an Option. Then we filter out all objects with None
+ case class specific for loading with all fields are Option. In this case Circe can read the objects and put None in 
+ problematics fields. After read, we filter out all objects with None
  or empty fields and transform to the natural case class.
   
  1. To compute the metrics the Click data was transformed to a Map "impression_id -> revenue" for efficient access. 
