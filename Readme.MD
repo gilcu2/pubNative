@@ -32,7 +32,7 @@ some metrics by country and application and the third is about finding the adver
  the top five. In particular, if a advertiser does not have revenue is discarded.
  
  The main program get the paths for input and output files as line parameters in the order submissions,clicks, metrics
- and topAdvertisers. We use scallop library for process line parameter. A script for launch using spark-submit in 
+ and topAdvertisers. We use scallop library for process line parameter. A script for launch using spark-submit is show in 
  Example bellow.
  
  ## Preconditions
