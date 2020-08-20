@@ -25,10 +25,11 @@ some metrics by country and application and the third is about finding the adver
  1. To compute the metrics the Click data was transformed to a Map "impression_id -> revenue" for efficient access. 
  Then the computation was done using a grouping by app and country over the sequence of impressions.
  
- 1. To compute the top advertiser we create datasets from the sequences of impressions and clicks. Then join they by 
+ 1. To compute the top advertiser with Spark we create datasets from the sequences of impressions and clicks. Then join they by 
  impression id using a broadcast left join. The idea is that clicks dataset fit in memory so can be done a more efficient 
- join. Then the average revenue per advertiser is compute, the result is grouped by application and country, sorted by revenue and taked 
- the top five. In particular if a advertiser does not have revenue it is discarded.
+ join. Then the average revenue per advertiser is compute using a groupBy and avg. The result is grouped by application 
+ and country, sorted by revenue and took
+ the top five. In particular, if a advertiser does not have revenue is discarded.
  
  The main program get the paths for input and output files as line parameters in the order submissions,clicks, metrics
  and topAdvertisers. We use scallop library for process line parameter. A script for launch using spark-submit in 
