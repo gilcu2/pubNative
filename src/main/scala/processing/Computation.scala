@@ -22,36 +22,30 @@ object Computation {
 
 	}
 
-	def computeTopAdvertisers(impressions: Seq[Impression], clicks: Seq[Click])(implicit spark: SparkSession): Dataset[TopAdvertisers] = {
+	def computeTopAdvertisers(impressions: Seq[Impression], clicks: Seq[Click],
+														partitions: Int = 8)(implicit spark: SparkSession): Dataset[TopAdvertisers] = {
 
 		import spark.implicits._
 
-		val impressionsDS = impressions.toDS.repartition(8)
-		val clicksDS = clicks.toDS.repartition(8)
+		val impressionsDS = impressions.toDS.repartition(partitions)
+		val clicksDS = clicks.toDS.repartition(partitions)
 
 		val join = impressionsDS.join(broadcast(clicksDS), impressionsDS("id") === clicksDS("impression_id"), "left")
 
-		//		join.show()
-
 		val withAvg = join.groupBy(app_idF, country_codeF, advertiser_idF).agg(avg(revenueF))
-		//		withAvg.show()
+			.filter(col("avg(revenue)") > 0.0)
 
-		val groupingAdvertizers = withAvg.withColumn("combined", array("avg(revenue)", advertiser_idF))
+		val groupedAdvertizers = withAvg.withColumn("combined", array("avg(revenue)", advertiser_idF))
 			.groupBy(app_idF, country_codeF)
 			.agg(sort_array(collect_list("combined"), false))
 			.withColumnRenamed("sort_array(collect_list(combined), false)", "sorted")
 
-		//		groupingAdvertizers.show()
-
-		val topAdvertizer = groupingAdvertizers
+		val topAdvertizer = groupedAdvertizers
 			.withColumn("First5", slice(col("sorted"), 1, 5))
 			.withColumn(recommended_advertiser_idsF, expr("transform(First5,x -> cast(x[1] as int))"))
 			.select(app_idF, country_codeF, recommended_advertiser_idsF)
 			.as[TopAdvertisers]
 			.sort(country_codeF, app_idF)
-
-		//		topAdvertizer.printSchema()
-		//		topAdvertizer.show()
 
 		topAdvertizer
 	}

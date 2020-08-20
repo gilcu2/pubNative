@@ -16,6 +16,11 @@ libraryDependencies ++= Seq(
 
 	"org.apache.spark" %% "spark-sql" % sparkV % "provided",
 
+	"org.rogach" %% "scallop" % "3.3.1",
+	"com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
+	"ch.qos.logback" % "logback-classic" % "1.2.3",
+
+
 	"org.scalatest" %% "scalatest" % "3.2.0" % "test"
 
 )

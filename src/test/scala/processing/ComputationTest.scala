@@ -68,7 +68,7 @@ class ComputationTest extends AnyFlatSpec with Matchers with SparkSessionTestWra
 
 	}
 
-	"Computation" should "compute top advertiser" in {
+	"Computation" should "compute top advertiser, advertisers without revenue must not be included" in {
 
 		val impressionsText =
 			"""
@@ -102,6 +102,12 @@ class ComputationTest extends AnyFlatSpec with Matchers with SparkSessionTestWra
 				|        "advertiser_id": 8,
 				|        "country_code": "DE",
 				|        "id": "a39747e8-9c58-41db-8f9f-27963bc248b9"
+				|    },
+				|    {
+				|        "app_id": 32,
+				|        "advertiser_id": 8,
+				|        "country_code": "US",
+				|        "id": "a39747e8-9c58-41db-8f9f-27963bc248c9"
 				|    }
 				|]
 				|""".stripMargin

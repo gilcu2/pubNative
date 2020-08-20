@@ -9,14 +9,16 @@ object Reader {
 
 	case class OptionClick(impression_id: Option[String], revenue: Option[Double])
 
-	//TODO Read as stream
-	//TODO Parametrice
-
 	def loadFile(path: String): String = {
 		val file = scala.io.Source.fromFile(path)
 		val buffer = file.mkString
 		file.close()
 		buffer
+	}
+
+	def loadImpressions(path: String): Either[String, Seq[Impression]] = {
+		val buffer = loadFile(path)
+		parseImpressions(buffer)
 	}
 
 	def parseImpressions(buffer: String): Either[String, Seq[Impression]] = {
@@ -52,11 +54,5 @@ object Reader {
 			case Left(_) => Left(s"Problem parsing clicks json")
 		}
 	}
-
-	def loadImpressions(path: String): Either[String, Seq[Impression]] = {
-		val buffer = loadFile(path)
-		parseImpressions(buffer)
-	}
-
 
 }
